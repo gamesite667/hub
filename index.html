@@ -53,7 +53,7 @@
     <!-- All Games Section -->
     <section class="section" id="all-games">
         <div class="container">
-            <h2 class="section-title">All Games (73)</h2>
+            <h2 class="section-title">All Games</h2>
             <div class="games-grid" id="games-grid">
                 <!-- Games will be loaded here by JavaScript -->
             </div>
@@ -79,7 +79,7 @@
     </footer>
 
     <script>
-        // Game data
+        // Game data - Complete list of 73 games
         const games = [
             { title: "10 Minutes Till Dawn", emoji: "⏰", description: "Survive for 10 minutes against waves of enemies!", tags: ["Survival", "Action"], url: "https://github.com/lockin676767676767/games/raw/main/10minutestilldawn.html" },
             { title: "2048", emoji: "🔢", description: "Slide tiles and combine numbers to reach 2048!", tags: ["Puzzle", "Classic"], url: "https://github.com/lockin676767676767/games/raw/main/2048.html" },
@@ -222,7 +222,8 @@
         const savedTheme = localStorage.getItem('theme') || 'light';
         document.querySelector(`input[name="theme"][value="${savedTheme}"]`).checked = true;
 
-        // Initial render
+        // Initial render - THIS IS THE KEY PART
+        console.log("Loading", games.length, "games");
         renderGames();
         renderFavorites();
     </script>
