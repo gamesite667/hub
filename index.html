@@ -504,35 +504,42 @@
     </div>
 
     <script>
-        // Default games
-        const defaultGames = [
-            { name: "2048", url: "https://github.com/lockin676767676767/games/raw/main/2048.html", tags: "Puzzle", emoji: "🔢" },
-            { name: "Flappy Bird", url: "https://github.com/lockin676767676767/games/raw/main/flappybird.html", tags: "Arcade", emoji: "🐦" },
-            { name: "Tetris", url: "https://github.com/lockin676767676767/games/raw/main/tetris.html", tags: "Puzzle", emoji: "🧱" },
-            { name: "Snake", url: "https://github.com/lockin676767676767/games/raw/main/blockysnakes.html", tags: "Classic", emoji: "🐍" },
-            { name: "Doodle Jump", url: "https://github.com/lockin676767676767/games/raw/main/doodlejump.html", tags: "Arcade", emoji: "🦗" },
-            { name: "Cookie Clicker", url: "https://github.com/lockin676767676767/games/raw/main/cookieclicker.html", tags: "Clicker", emoji: "🍪" },
-            { name: "Crossy Road", url: "https://github.com/lockin676767676767/games/raw/main/crossyroad.html", tags: "Arcade", emoji: "🚦" },
-            { name: "Temple Run", url: "https://github.com/lockin676767676767/games/raw/main/templerun.html", tags: "Endless", emoji: "🏃" },
-            { name: "Slope", url: "https://github.com/lockin676767676767/games/raw/main/slope.html", tags: "Arcade", emoji: "🔴" },
-            { name: "Subway Surfers", url: "https://github.com/lockin676767676767/games/raw/main/subwaysurfers.html", tags: "Endless", emoji: "🚇" },
-            { name: "Geometry Dash", url: "https://github.com/lockin676767676767/games/raw/main/geometrydashlite.html", tags: "Rhythm", emoji: "🔷" },
-            { name: "Run 3", url: "https://github.com/lockin676767676767/games/raw/main/run3.html", tags: "Platformer", emoji: "🏃" },
-            { name: "Monkey Mart", url: "https://github.com/lockin676767676767/games/raw/main/monkeymart.html", tags: "Business", emoji: "🐵" },
-            { name: "Retro Bowl", url: "https://github.com/lockin676767676767/games/raw/main/retrobowl.html", tags: "Sports", emoji: "🏈" },
-            { name: "Drift Boss", url: "https://github.com/lockin676767676767/games/raw/main/driftboss.html", tags: "Racing", emoji: "🏎️" },
-            { name: "Helix Jump", url: "https://github.com/lockin676767676767/games/raw/main/helixjump.html", tags: "Arcade", emoji: "🌪️" },
-            { name: "Tiny Fishing", url: "https://github.com/lockin676767676767/games/raw/main/tinyfishing.html", tags: "Casual", emoji: "🎣" },
-            { name: "Tower of Hanoi", url: "https://github.com/lockin676767676767/games/raw/main/towerofhanoi.html", tags: "Puzzle", emoji: "🗼" },
-            { name: "Zig Zag", url: "https://github.com/lockin676767676767/games/raw/main/zigzag.html", tags: "Arcade", emoji: "⚡" },
-            { name: "Stick Hero", url: "https://github.com/lockin676767676767/games/raw/main/stickhero.html", tags: "Arcade", emoji: "🎮" }
-        ];
+        // Dynamically load games from the gamesite667/games repo
+        let defaultGames = []; // will be populated from GitHub
+        const GAMES_REPO_API = 'https://api.github.com/repos/gamesite667/games/contents';
+
+        // Fetch HTML/HTM files from the games repo and build defaultGames
+        async function fetchRepoGames() {
+            try {
+                const res = await fetch(GAMES_REPO_API);
+                if (!res.ok) throw new Error('GitHub API error: ' + res.status);
+                const files = await res.json();
+                const htmlFiles = files.filter(f => f.type === 'file' && (f.name.toLowerCase().endsWith('.html') || f.name.toLowerCase().endsWith('.htm')));
+                const repoGames = htmlFiles
+                    .filter(f => !/^desktop\.ini$/i.test(f.name) && f.name.toLowerCase() !== 'index.html')
+                    .map(f => ({
+                        name: f.name.replace(/\.(html|htm)$/i, '').replace(/[-_\.]/g, ' '),
+                        url: f.download_url,
+                        image: '',
+                        description: '',
+                        tags: '',
+                        emoji: '🎮'
+                    }));
+                // Sort alphabetically for consistent order
+                defaultGames = repoGames.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
+                console.log('Loaded', defaultGames.length, 'games from repo');
+            } catch (e) {
+                console.error('Failed to fetch games from repo:', e);
+                // Leave defaultGames empty; the rest of the UI still works for manually added games
+            }
+        }
 
         let games = [];
         let favorites = [];
 
         // Initialize
-        function init() {
+        async function init() {
+            await fetchRepoGames();
             loadGames();
             renderGames();
             renderFavorites();
@@ -544,7 +551,7 @@
             const stored = localStorage.getItem('customGames');
             const customGames = stored ? JSON.parse(stored) : [];
             games = [...defaultGames, ...customGames];
-            
+
             const storedFavorites = localStorage.getItem('favorites');
             favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
         }
@@ -558,6 +565,12 @@
 
         // Display Games of Week
         function displayGamesOfWeek() {
+            if (games.length === 0) {
+                document.getElementById('gameOfWeek1').innerHTML = '<p style="color:#fff;font-size:14px;">No games available</p>';
+                document.getElementById('gameOfWeek2').innerHTML = '';
+                document.getElementById('gameOfWeek3').innerHTML = '';
+                return;
+            }
             const week1 = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000)) % games.length;
             const week2 = (week1 + Math.floor(games.length / 3)) % games.length;
             const week3 = (week1 + Math.floor((2 * games.length) / 3)) % games.length;
@@ -568,8 +581,9 @@
         }
 
         function renderGameOfWeek(game) {
+            if (!game) return '<p>No game</p>';
             return `
-                <img src="${game.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23a855f7%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${game.emoji || '🎮'}%3C/text%3E%3C/svg%3E'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23a855f7%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                ${game.image ? `<img src="${game.image}" alt="${game.name}">` : `<div style="width:100%;height:200px;display:flex;align-items:center;justify-content:center;font-size:64px;border-radius:8px;margin-bottom:15px;background:linear-gradient(135deg,#a855f7,#6366f1);">${game.emoji || '🎮'}</div>`}
                 <h3>${game.name}</h3>
                 <p style="font-size: 12px; margin-bottom: 10px;">${game.description || ''}</p>
                 <a href="${game.url}" target="_blank" class="play-btn">▶ Play Game</a>
@@ -582,7 +596,7 @@
             grid.innerHTML = games.map((game, idx) => `
                 <div class="game-card">
                     <div class="game-image">
-                        <img src="${game.image || ''}" alt="${game.name}" onerror="this.style.display='none'">
+                        ${game.image ? `<img src="${game.image}" alt="${game.name}" onerror="this.style.display='none'">` : ''}
                         <div style="position: absolute; font-size: 48px;">${game.emoji || '🎮'}</div>
                         <button class="favorite-star ${favorites.includes(game.name) ? 'active' : ''}" onclick="toggleFavorite('${game.name.replace(/'/g, "\\'")}')">⭐</button>
                     </div>
@@ -601,7 +615,7 @@
         function renderFavorites() {
             const list = document.getElementById('favoritesList');
             const favGames = games.filter(g => favorites.includes(g.name));
-            
+
             if (favGames.length === 0) {
                 list.innerHTML = '<p style="font-size: 12px; color: #999;">No favorites yet. Click ⭐ on games!</p>';
                 return;
@@ -684,7 +698,7 @@
                 exportDate: new Date().toISOString()
             };
             const json = JSON.stringify(data, null, 2);
-            
+
             const blob = new Blob([json], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
