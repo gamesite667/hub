@@ -3,120 +3,740 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Game Hub - Play Your Favorite Games</title>
-    <link rel="stylesheet" href="styles.css" />
+    <title>Game Hub - 73+ Games</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0b0b12 0%, #1a1a2e 100%);
+            color: #ffffff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: linear-gradient(90deg, #a855f7, #6366f1);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(168, 85, 247, 0.3);
+        }
+
+        h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .games-of-week {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .week-game {
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(168, 85, 247, 0.3);
+        }
+
+        .week-game img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .week-game h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .week-game .badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
+
+        .week-game .play-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .week-game .play-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .sidebar {
+            position: fixed;
+            right: 20px;
+            top: 100px;
+            width: 250px;
+            max-height: 600px;
+            background: rgba(20, 20, 35, 0.95);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: auto;
+            z-index: 100;
+        }
+
+        .sidebar h3 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #a855f7;
+        }
+
+        .favorite-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .favorite-item:hover {
+            background: rgba(168, 85, 247, 0.2);
+        }
+
+        .favorite-item img {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            object-fit: cover;
+        }
+
+        .favorite-item span {
+            flex: 1;
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .star-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .star-btn.active {
+            color: #fbbf24;
+        }
+
+        .main-content {
+            margin-right: 280px;
+        }
+
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #a855f7;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .game-card {
+            background: rgba(30, 30, 50, 0.8);
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 10px 30px rgba(168, 85, 247, 0.2);
+        }
+
+        .game-image {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, #a855f7, #6366f1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .game-info {
+            padding: 12px;
+        }
+
+        .game-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .game-actions button {
+            flex: 1;
+            padding: 6px;
+            font-size: 12px;
+            background: rgba(168, 85, 247, 0.3);
+            border: 1px solid rgba(168, 85, 247, 0.5);
+        }
+
+        .game-actions button:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+
+        .favorite-star {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 4px;
+            color: #999;
+        }
+
+        .favorite-star.active {
+            color: #fbbf24;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #1a1a2e;
+            border: 2px solid #a855f7;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: #a855f7;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 6px;
+            color: #fff;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 12px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            background: rgba(20, 20, 35, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            font-size: 12px;
+        }
+
+        .footer a {
+            color: #a855f7;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer button {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+
+            .main-content {
+                margin-right: 0;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .footer {
+                bottom: 10px;
+                right: 10px;
+                flex-direction: column;
+                width: calc(100% - 20px);
+            }
+        }
+    </style>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <h1 class="logo">🎮 Game Hub</h1>
-                <nav class="nav">
-                    <a href="#featured" class="nav-link">Featured</a>
-                    <a href="#all-games" class="nav-link">All Games</a>
-                </nav>
+    <div class="container">
+        <header>
+            <h1>🎮 Game Hub</h1>
+            <div class="header-buttons">
+                <button onclick="openAddGameModal()">➕ Add Game</button>
+                <button onclick="exportGames()">📤 Export Games</button>
+                <button onclick="openImportModal()">📥 Import Games</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="games-of-week">
+                <div class="week-game">
+                    <div class="badge">🔥 Game of Week #1</div>
+                    <div id="gameOfWeek1"></div>
+                </div>
+                <div class="week-game">
+                    <div class="badge">🔥 Game of Week #2</div>
+                    <div id="gameOfWeek2"></div>
+                </div>
+                <div class="week-game">
+                    <div class="badge">🔥 Game of Week #3</div>
+                    <div id="gameOfWeek3"></div>
+                </div>
+            </div>
+
+            <h2 class="section-title">All Games</h2>
+            <div class="games-grid" id="gamesGrid"></div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <h3>⭐ Favorites</h3>
+        <div id="favoritesList"></div>
+    </div>
+
+    <!-- Add Game Modal -->
+    <div class="modal" id="addGameModal">
+        <div class="modal-content">
+            <h2>Add New Game</h2>
+            <div class="form-group">
+                <label>Game Name *</label>
+                <input type="text" id="newGameName" placeholder="Enter game name">
+            </div>
+            <div class="form-group">
+                <label>Game URL *</label>
+                <input type="text" id="newGameUrl" placeholder="https://example.com/game.html">
+            </div>
+            <div class="form-group">
+                <label>Image URL (Optional)</label>
+                <input type="text" id="newGameImage" placeholder="https://example.com/image.png">
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="newGameDescription" placeholder="Brief description of the game"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="closeAddGameModal()">Cancel</button>
+                <button onclick="saveNewGame()" style="background: #a855f7;">Add Game</button>
             </div>
         </div>
-    </header>
+    </div>
 
-    <section class="hero" id="featured">
-        <div class="container">
-            <div class="hero-content">
-                <h2>Welcome to Game Hub</h2>
-                <p>Discover and play 73+ amazing games! No JavaScript needed!</p>
+    <!-- Import Modal -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <h2>Import Games</h2>
+            <div class="form-group">
+                <label>Paste exported games JSON:</label>
+                <textarea id="importData" placeholder="Paste your exported games JSON here"></textarea>
+            </div>
+            <div class="modal-buttons">
+                <button onclick="closeImportModal()">Cancel</button>
+                <button onclick="importGames()" style="background: #a855f7;">Import</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="section" id="all-games">
-        <div class="container">
-            <h2 class="section-title">All Games (73)</h2>
-            <div class="games-grid">
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⏰</div></div><div class="game-info"><h3 class="game-title">10 Minutes Till Dawn</h3><p class="game-description">Survive for 10 minutes against waves of enemies!</p><div class="game-meta"><span class="game-tag">Survival</span><span class="game-tag">Action</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/10minutestilldawn.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/10minutestilldawn.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🔢</div></div><div class="game-info"><h3 class="game-title">2048</h3><p class="game-description">Slide tiles and combine numbers to reach 2048!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/2048.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/2048.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🧁</div></div><div class="game-info"><h3 class="game-title">2048 Cupcakes</h3><p class="game-description">A delicious twist on the classic 2048 game!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/2048cupcakes.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/2048cupcakes.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🍔</div></div><div class="game-info"><h3 class="game-title">60 Second Burger Run</h3><p class="game-description">Run and collect burgers in 60 seconds!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/60s_burger_run_standalone.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/60s_burger_run_standalone.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">8️⃣</div></div><div class="game-info"><h3 class="game-title">8 Ball Classic</h3><p class="game-description">Classic billiards game with realistic physics!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Simulation</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/8ballclassic.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/8ballclassic.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎹</div></div><div class="game-info"><h3 class="game-title">Piano Tiles</h3><p class="game-description">Tap the tiles to the rhythm!</p><div class="game-meta"><span class="game-tag">Music</span><span class="game-tag">Rhythm</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/PianoTiles.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/PianoTiles.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">👁️</div></div><div class="game-info"><h3 class="game-title">Backrooms</h3><p class="game-description">Explore the mysterious backrooms!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Adventure</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/backrooms.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/backrooms.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🃏</div></div><div class="game-info"><h3 class="game-title">Balatro</h3><p class="game-description">A roguelike deck building game!</p><div class="game-meta"><span class="game-tag">Roguelike</span><span class="game-tag">Strategy</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/balatro.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/balatro.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⛏️</div></div><div class="game-info"><h3 class="game-title">Minecraft 1.8</h3><p class="game-description">Classic Minecraft in your browser!</p><div class="game-meta"><span class="game-tag">Sandbox</span><span class="game-tag">Building</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/1.8.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/1.8.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏀</div></div><div class="game-info"><h3 class="game-title">Basketball Stars</h3><p class="game-description">Play basketball online!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Multiplayer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/basketballstars.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/basketballstars.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎲</div></div><div class="game-info"><h3 class="game-title">Basket Random</h3><p class="game-description">Random basketball chaos!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/basketrandom.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/basketrandom.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🐍</div></div><div class="game-info"><h3 class="game-title">Blocky Snakes</h3><p class="game-description">Snake game with blocks!</p><div class="game-meta"><span class="game-tag">Classic</span><span class="game-tag">Arcade</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/blockysnakes.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/blockysnakes.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏁</div></div><div class="game-info"><h3 class="game-title">Blumgi Racers</h3><p class="game-description">Race with colorful characters!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/blumgiracers.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/blumgiracers.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🐹</div></div><div class="game-info"><h3 class="game-title">Capybara Clicker</h3><p class="game-description">Click the adorable capybara!</p><div class="game-meta"><span class="game-tag">Clicker</span><span class="game-tag">Idle</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/capybaraclicker.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/capybaraclicker.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏎️</div></div><div class="game-info"><h3 class="game-title">Carking Arena</h3><p class="game-description">Battle other cars!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Multiplayer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/carkingarena.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/carkingarena.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🧹</div></div><div class="game-info"><h3 class="game-title">Cleanup IO</h3><p class="game-description">Clean up with your group!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Multiplayer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/cleanupio.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/cleanupio.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⚡</div></div><div class="game-info"><h3 class="game-title">Cluster Rush</h3><p class="game-description">Navigate through obstacles!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/clusterrush.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/clusterrush.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🍪</div></div><div class="game-info"><h3 class="game-title">Cookie Clicker</h3><p class="game-description">The legendary idle clicker!</p><div class="game-meta"><span class="game-tag">Clicker</span><span class="game-tag">Idle</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/cookieclicker.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/cookieclicker.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🚗</div></div><div class="game-info"><h3 class="game-title">Crazy Cars</h3><p class="game-description">Drive crazy cars!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/crazycars.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/crazycars.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏍️</div></div><div class="game-info"><h3 class="game-title">Crazy Motorcycle</h3><p class="game-description">Perform crazy stunts!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Stunt</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/crazymotorcycle.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/crazymotorcycle.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🚦</div></div><div class="game-info"><h3 class="game-title">Crossy Road</h3><p class="game-description">Cross the endless roads!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Endless</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/crossyroad.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/crossyroad.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🐣</div></div><div class="game-info"><h3 class="game-title">Dadish</h3><p class="game-description">Dad radish adventure!</p><div class="game-meta"><span class="game-tag">Adventure</span><span class="game-tag">Platformer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/dadish1.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/dadish1.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🥬</div></div><div class="game-info"><h3 class="game-title">Dadish 2</h3><p class="game-description">More radish adventures!</p><div class="game-meta"><span class="game-tag">Adventure</span><span class="game-tag">Platformer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/dadish2.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/dadish2.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🦗</div></div><div class="game-info"><h3 class="game-title">Doodle Jump</h3><p class="game-description">Jump your way to the top!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/doodlejump.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/doodlejump.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🤸</div></div><div class="game-info"><h3 class="game-title">Dreadhead Parkour</h3><p class="game-description">Parkour through the city!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Parkour</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/dreadheadparkour.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/dreadheadparkour.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏎️</div></div><div class="game-info"><h3 class="game-title">Drift Boss</h3><p class="game-description">Master the art of drifting!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/driftboss.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/driftboss.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">😠</div></div><div class="game-info"><h3 class="game-title">Drive Mad</h3><p class="game-description">Navigate crazy stunts!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Stunt</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/drivemad.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/drivemad.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🥚</div></div><div class="game-info"><h3 class="game-title">Eggy Car</h3><p class="game-description">Don't break the egg!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Racing</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/eggycar.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/eggycar.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">😊</div></div><div class="game-info"><h3 class="game-title">Elastic Face</h3><p class="game-description">Stretch and flex!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/elasticface.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/elasticface.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">👾</div></div><div class="game-info"><h3 class="game-title">Evil Glitch</h3><p class="game-description">Defeat the glitch!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Short</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/evilglitch.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/evilglitch.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🐦</div></div><div class="game-info"><h3 class="game-title">Flappy Bird</h3><p class="game-description">The classic flappy bird!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/flappybird.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/flappybird.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">💧</div></div><div class="game-info"><h3 class="game-title">Fluid Simulator</h3><p class="game-description">Play with fluid physics!</p><div class="game-meta"><span class="game-tag">Simulation</span><span class="game-tag">Physics</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fluidsimulator.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fluidsimulator.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🤖</div></div><div class="game-info"><h3 class="game-title">Five Nights at Freddy's</h3><p class="game-description">Guard from animatronics!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Survival</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fnaf.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fnaf.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🤖</div></div><div class="game-info"><h3 class="game-title">FNAF 2</h3><p class="game-description">The sequel continues!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Survival</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fnaf2.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fnaf2.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🔥</div></div><div class="game-info"><h3 class="game-title">FNAF 3</h3><p class="game-description">The nightmare continues!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Survival</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fnaf3.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fnaf3.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">😱</div></div><div class="game-info"><h3 class="game-title">FNAF 4</h3><p class="game-description">The final chapter!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Survival</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fnaf4.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fnaf4.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⚽</div></div><div class="game-info"><h3 class="game-title">Football Legends</h3><p class="game-description">Play football like a legend!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Multiplayer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/footballlegends.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/footballlegends.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🍎</div></div><div class="game-info"><h3 class="game-title">Fruit Ninja</h3><p class="game-description">Slice fruit like a ninja!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Arcade</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/fruitninja.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/fruitninja.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⚔️</div></div><div class="game-info"><h3 class="game-title">Funny Battle</h3><p class="game-description">Hilarious battles!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Multiplayer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/funnybattle.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/funnybattle.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🔫</div></div><div class="game-info"><h3 class="game-title">Funny Shooter 2</h3><p class="game-description">Hilarious shooting!</p><div class="game-meta"><span class="game-tag">Shooter</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/funnyshooter2.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/funnyshooter2.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🔷</div></div><div class="game-info"><h3 class="game-title">Geometry Dash Lite</h3><p class="game-description">Jump to the beat!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Rhythm</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/geometrydashlite.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/geometrydashlite.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🌈</div></div><div class="game-info"><h3 class="game-title">Geometry Vibes</h3><p class="game-description">Feel the geometric rhythm!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Rhythm</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/geometryvibes.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/geometryvibes.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">👵</div></div><div class="game-info"><h3 class="game-title">Granny</h3><p class="game-description">Escape from granny!</p><div class="game-meta"><span class="game-tag">Horror</span><span class="game-tag">Adventure</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/granny.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/granny.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🤔</div></div><div class="game-info"><h3 class="game-title">Guess Their Answer</h3><p class="game-description">Guess what they're thinking!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Trivia</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/guesstheiranswer.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/guesstheiranswer.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🌪️</div></div><div class="game-info"><h3 class="game-title">Helix Jump</h3><p class="game-description">Jump down the helix!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/helixjump.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/helixjump.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏚️</div></div><div class="game-info"><h3 class="game-title">House of Hazards</h3><p class="game-description">Survive with friends!</p><div class="game-meta"><span class="game-tag">Multiplayer</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/houseofhazards.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/houseofhazards.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🛸</div></div><div class="game-info"><h3 class="game-title">Hover Racer Drive</h3><p class="game-description">Race with hover cars!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Sci-Fi</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/hoverracerdrive.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/hoverracerdrive.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎯</div></div><div class="game-info"><h3 class="game-title">Johnny Trigger</h3><p class="game-description">Aim and shoot!</p><div class="game-meta"><span class="game-tag">Shooter</span><span class="game-tag">Action</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/johnnytrigger.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/johnnytrigger.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">😈</div></div><div class="game-info"><h3 class="game-title">Level Devil</h3><p class="game-description">Level is your enemy!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Platformer</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/leveldevil.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/leveldevil.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🌟</div></div><div class="game-info"><h3 class="game-title">Mario 64</h3><p class="game-description">Classic 3D Mario!</p><div class="game-meta"><span class="game-tag">Platformer</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/mario64.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/mario64.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🐵</div></div><div class="game-info"><h3 class="game-title">Monkey Mart</h3><p class="game-description">Run a mart as a monkey!</p><div class="game-meta"><span class="game-tag">Business</span><span class="game-tag">Idle</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/monkeymart.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/monkeymart.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏁</div></div><div class="game-info"><h3 class="game-title">Moto X3M</h3><p class="game-description">Motorcycle stunts!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Stunt</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/motox3m.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/motox3m.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⛏️</div></div><div class="game-info"><h3 class="game-title">Noob Miner</h3><p class="game-description">Mine and build!</p><div class="game-meta"><span class="game-tag">Sandbox</span><span class="game-tag">Mining</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/noobminer.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/noobminer.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🪶</div></div><div class="game-info"><h3 class="game-title">OvO</h3><p class="game-description">Challenging platformer!</p><div class="game-meta"><span class="game-tag">Platformer</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/ovo.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/ovo.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">📄</div></div><div class="game-info"><h3 class="game-title">Paper IO 2</h3><p class="game-description">Claim territory!</p><div class="game-meta"><span class="game-tag">Multiplayer</span><span class="game-tag">io</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/paperio2.htm" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/paperio2.htm" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🛣️</div></div><div class="game-info"><h3 class="game-title">Polytrack</h3><p class="game-description">Navigate the polygon road!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/polytrack.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/polytrack.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏹</div></div><div class="game-info"><h3 class="game-title">Ragdoll Archers</h3><p class="game-description">Shoot ragdolls!</p><div class="game-meta"><span class="game-tag">Physics</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/ragdollarchers.htm" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/ragdollarchers.htm" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏈</div></div><div class="game-info"><h3 class="game-title">Retro Bowl</h3><p class="game-description">Manage your team!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Management</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/retrobowl.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/retrobowl.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎓</div></div><div class="game-info"><h3 class="game-title">Retro Bowl College</h3><p class="game-description">College football!</p><div class="game-meta"><span class="game-tag">Sports</span><span class="game-tag">Management</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/retrobowlcollege.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/retrobowlcollege.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏃</div></div><div class="game-info"><h3 class="game-title">Run 3</h3><p class="game-description">Run the endless tunnel!</p><div class="game-meta"><span class="game-tag">Platformer</span><span class="game-tag">Endless</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/run3.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/run3.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🔴</div></div><div class="game-info"><h3 class="game-title">Slope</h3><p class="game-description">Roll down and survive!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/slope.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/slope.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">❄️</div></div><div class="game-info"><h3 class="game-title">Snowball IO</h3><p class="game-description">Grow your snowball!</p><div class="game-meta"><span class="game-tag">Multiplayer</span><span class="game-tag">io</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/snowballio.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/snowballio.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⌨️</div></div><div class="game-info"><h3 class="game-title">Spacebar Clicker</h3><p class="game-description">Click fast!</p><div class="game-meta"><span class="game-tag">Clicker</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/spacebarclicker.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/spacebarclicker.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎮</div></div><div class="game-info"><h3 class="game-title">Stick Hero</h3><p class="game-description">Extend your stick!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/stickhero.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/stickhero.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🚇</div></div><div class="game-info"><h3 class="game-title">Subway Surfers</h3><p class="game-description">Run from the inspector!</p><div class="game-meta"><span class="game-tag">Endless</span><span class="game-tag">Arcade</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/subwaysurfers.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/subwaysurfers.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏃</div></div><div class="game-info"><h3 class="game-title">Temple Run</h3><p class="game-description">Run through temple!</p><div class="game-meta"><span class="game-tag">Endless</span><span class="game-tag">Adventure</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/templerun.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/templerun.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🧱</div></div><div class="game-info"><h3 class="game-title">Tetris</h3><p class="game-description">Stack the blocks!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Classic</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/tetris.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/tetris.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🌋</div></div><div class="game-info"><h3 class="game-title">The Floor is Lava</h3><p class="game-description">Avoid the lava!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/thefloorislava.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/thefloorislava.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🌳</div></div><div class="game-info"><h3 class="game-title">Timberman</h3><p class="game-description">Chop trees carefully!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/timberman.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/timberman.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🎣</div></div><div class="game-info"><h3 class="game-title">Tiny Fishing</h3><p class="game-description">Catch fish!</p><div class="game-meta"><span class="game-tag">Casual</span><span class="game-tag">Idle</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/tinyfishing.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/tinyfishing.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🏛️</div></div><div class="game-info"><h3 class="game-title">Tomb Runner</h3><p class="game-description">Run through tombs!</p><div class="game-meta"><span class="game-tag">Endless</span><span class="game-tag">Adventure</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/tombrunner.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/tombrunner.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">💥</div></div><div class="game-info"><h3 class="game-title">Too Many Bullets</h3><p class="game-description">Dodge bullets!</p><div class="game-meta"><span class="game-tag">Action</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/toomanybutt.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/toomanybutt.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🗼</div></div><div class="game-info"><h3 class="game-title">Tower of Hanoi</h3><p class="game-description">Solve the puzzle!</p><div class="game-meta"><span class="game-tag">Puzzle</span><span class="game-tag">Brain</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/towerofhanoi.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/towerofhanoi.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🚗</div></div><div class="game-info"><h3 class="game-title">Traffic Racer</h3><p class="game-description">Navigate traffic!</p><div class="game-meta"><span class="game-tag">Racing</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/trafficracer.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/trafficracer.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🚀</div></div><div class="game-info"><h3 class="game-title">Tunnel Rush</h3><p class="game-description">Rush the tunnel!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Speed</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/tunnelrush.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/tunnelrush.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">⚡</div></div><div class="game-info"><h3 class="game-title">Zig Zag</h3><p class="game-description">Navigate the zigzag!</p><div class="game-meta"><span class="game-tag">Arcade</span><span class="game-tag">Skill</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/zigzag.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/zigzag.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
-                <div class="game-card"><div class="game-image"><div class="placeholder-image">🧟</div></div><div class="game-info"><h3 class="game-title">Zombie Tsunami</h3><p class="game-description">Lead the zombie wave!</p><div class="game-meta"><span class="game-tag">Endless</span><span class="game-tag">Fun</span></div><div class="game-actions"><a href="https://github.com/lockin676767676767/games/raw/main/zombitsunami.html" class="btn btn-primary">Same Tab</a><a href="https://github.com/lockin676767676767/games/raw/main/zombitsunami.html" target="_blank" class="btn btn-secondary">New Tab</a></div></div></div>
+    <!-- Code Modal -->
+    <div class="modal" id="codeModal">
+        <div class="modal-content">
+            <h2>Open Source Code</h2>
+            <p>This project is open source! You can find the full code on GitHub:</p>
+            <a href="https://github.com/gamesite667/hub" target="_blank" style="color: #a855f7; margin: 10px 0; display: block;">
+                📖 View on GitHub →
+            </a>
+            <p style="font-size: 12px; margin-top: 10px;">Features:</p>
+            <ul style="margin-left: 20px; font-size: 12px;">
+                <li>Add custom games locally</li>
+                <li>Export/Import your games</li>
+                <li>Favorite games with star system</li>
+                <li>Games of the Week rotation</li>
+                <li>Local storage persistence</li>
+            </ul>
+            <div class="modal-buttons" style="margin-top: 20px;">
+                <button onclick="closeCodeModal()">Close</button>
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Game Hub - 73 Pure HTML Games. No JavaScript!</p>
-        </div>
-    </footer>
+    <div class="footer">
+        <a href="https://github.com/gamesite667" target="_blank">👨‍💻 Made by gamesite667</a>
+        <button onclick="openCodeModal()">📖 Open Source</button>
+    </div>
+
+    <script>
+        // Default games
+        const defaultGames = [
+            { name: "2048", url: "https://github.com/lockin676767676767/games/raw/main/2048.html", tags: "Puzzle", emoji: "🔢" },
+            { name: "Flappy Bird", url: "https://github.com/lockin676767676767/games/raw/main/flappybird.html", tags: "Arcade", emoji: "🐦" },
+            { name: "Tetris", url: "https://github.com/lockin676767676767/games/raw/main/tetris.html", tags: "Puzzle", emoji: "🧱" },
+            { name: "Snake", url: "https://github.com/lockin676767676767/games/raw/main/blockysnakes.html", tags: "Classic", emoji: "🐍" },
+            { name: "Doodle Jump", url: "https://github.com/lockin676767676767/games/raw/main/doodlejump.html", tags: "Arcade", emoji: "🦗" },
+            { name: "Cookie Clicker", url: "https://github.com/lockin676767676767/games/raw/main/cookieclicker.html", tags: "Clicker", emoji: "🍪" },
+            { name: "Crossy Road", url: "https://github.com/lockin676767676767/games/raw/main/crossyroad.html", tags: "Arcade", emoji: "🚦" },
+            { name: "Temple Run", url: "https://github.com/lockin676767676767/games/raw/main/templerun.html", tags: "Endless", emoji: "🏃" },
+            { name: "Slope", url: "https://github.com/lockin676767676767/games/raw/main/slope.html", tags: "Arcade", emoji: "🔴" },
+            { name: "Subway Surfers", url: "https://github.com/lockin676767676767/games/raw/main/subwaysurfers.html", tags: "Endless", emoji: "🚇" },
+            { name: "Geometry Dash", url: "https://github.com/lockin676767676767/games/raw/main/geometrydashlite.html", tags: "Rhythm", emoji: "🔷" },
+            { name: "Run 3", url: "https://github.com/lockin676767676767/games/raw/main/run3.html", tags: "Platformer", emoji: "🏃" },
+            { name: "Monkey Mart", url: "https://github.com/lockin676767676767/games/raw/main/monkeymart.html", tags: "Business", emoji: "🐵" },
+            { name: "Retro Bowl", url: "https://github.com/lockin676767676767/games/raw/main/retrobowl.html", tags: "Sports", emoji: "🏈" },
+            { name: "Drift Boss", url: "https://github.com/lockin676767676767/games/raw/main/driftboss.html", tags: "Racing", emoji: "🏎️" },
+            { name: "Helix Jump", url: "https://github.com/lockin676767676767/games/raw/main/helixjump.html", tags: "Arcade", emoji: "🌪️" },
+            { name: "Tiny Fishing", url: "https://github.com/lockin676767676767/games/raw/main/tinyfishing.html", tags: "Casual", emoji: "🎣" },
+            { name: "Tower of Hanoi", url: "https://github.com/lockin676767676767/games/raw/main/towerofhanoi.html", tags: "Puzzle", emoji: "🗼" },
+            { name: "Zig Zag", url: "https://github.com/lockin676767676767/games/raw/main/zigzag.html", tags: "Arcade", emoji: "⚡" },
+            { name: "Stick Hero", url: "https://github.com/lockin676767676767/games/raw/main/stickhero.html", tags: "Arcade", emoji: "🎮" }
+        ];
+
+        let games = [];
+        let favorites = [];
+
+        // Initialize
+        function init() {
+            loadGames();
+            renderGames();
+            renderFavorites();
+            displayGamesOfWeek();
+        }
+
+        // Load games from localStorage
+        function loadGames() {
+            const stored = localStorage.getItem('customGames');
+            const customGames = stored ? JSON.parse(stored) : [];
+            games = [...defaultGames, ...customGames];
+            
+            const storedFavorites = localStorage.getItem('favorites');
+            favorites = storedFavorites ? JSON.parse(storedFavorites) : [];
+        }
+
+        // Save games to localStorage
+        function saveGames() {
+            const customGames = games.slice(defaultGames.length);
+            localStorage.setItem('customGames', JSON.stringify(customGames));
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+        }
+
+        // Display Games of Week
+        function displayGamesOfWeek() {
+            const week1 = Math.floor(Date.now() / (7 * 24 * 60 * 60 * 1000)) % games.length;
+            const week2 = (week1 + Math.floor(games.length / 3)) % games.length;
+            const week3 = (week1 + Math.floor((2 * games.length) / 3)) % games.length;
+
+            document.getElementById('gameOfWeek1').innerHTML = renderGameOfWeek(games[week1]);
+            document.getElementById('gameOfWeek2').innerHTML = renderGameOfWeek(games[week2]);
+            document.getElementById('gameOfWeek3').innerHTML = renderGameOfWeek(games[week3]);
+        }
+
+        function renderGameOfWeek(game) {
+            return `
+                <img src="${game.image || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23a855f7%22 width=%22200%22 height=%22200%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E${game.emoji || '🎮'}%3C/text%3E%3C/svg%3E'}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect fill=%22%23a855f7%22 width=%22200%22 height=%22200%22/%3E%3C/svg%3E'">
+                <h3>${game.name}</h3>
+                <p style="font-size: 12px; margin-bottom: 10px;">${game.description || ''}</p>
+                <a href="${game.url}" target="_blank" class="play-btn">▶ Play Game</a>
+            `;
+        }
+
+        // Render games grid
+        function renderGames() {
+            const grid = document.getElementById('gamesGrid');
+            grid.innerHTML = games.map((game, idx) => `
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="${game.image || ''}" alt="${game.name}" onerror="this.style.display='none'">
+                        <div style="position: absolute; font-size: 48px;">${game.emoji || '🎮'}</div>
+                        <button class="favorite-star ${favorites.includes(game.name) ? 'active' : ''}" onclick="toggleFavorite('${game.name.replace(/'/g, "\\'")}')">⭐</button>
+                    </div>
+                    <div class="game-info">
+                        <div class="game-title">${game.name}</div>
+                        <div class="game-actions">
+                            <a href="${game.url}" target="_blank" style="flex: 1; text-decoration: none;"><button>▶ Play</button></a>
+                            ${idx >= defaultGames.length ? `<button onclick="deleteGame(${idx})" style="flex: 0.5; background: #f87171;">🗑️</button>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render favorites sidebar
+        function renderFavorites() {
+            const list = document.getElementById('favoritesList');
+            const favGames = games.filter(g => favorites.includes(g.name));
+            
+            if (favGames.length === 0) {
+                list.innerHTML = '<p style="font-size: 12px; color: #999;">No favorites yet. Click ⭐ on games!</p>';
+                return;
+            }
+
+            list.innerHTML = favGames.map(game => `
+                <div class="favorite-item" onclick="window.open('${game.url}', '_blank')">
+                    <img src="${game.image || ''}" alt="${game.name}" onerror="this.style.display='none'">
+                    <span>${game.name}</span>
+                    <button class="star-btn active" onclick="event.stopPropagation(); toggleFavorite('${game.name.replace(/'/g, "\\'")}')">⭐</button>
+                </div>
+            `).join('');
+        }
+
+        // Toggle favorite
+        function toggleFavorite(gameName) {
+            if (favorites.includes(gameName)) {
+                favorites = favorites.filter(f => f !== gameName);
+            } else {
+                favorites.push(gameName);
+            }
+            saveGames();
+            renderGames();
+            renderFavorites();
+        }
+
+        // Modal functions
+        function openAddGameModal() {
+            document.getElementById('addGameModal').classList.add('active');
+        }
+
+        function closeAddGameModal() {
+            document.getElementById('addGameModal').classList.remove('active');
+            document.getElementById('newGameName').value = '';
+            document.getElementById('newGameUrl').value = '';
+            document.getElementById('newGameImage').value = '';
+            document.getElementById('newGameDescription').value = '';
+        }
+
+        function saveNewGame() {
+            const name = document.getElementById('newGameName').value.trim();
+            const url = document.getElementById('newGameUrl').value.trim();
+            const image = document.getElementById('newGameImage').value.trim();
+            const description = document.getElementById('newGameDescription').value.trim();
+
+            if (!name || !url) {
+                alert('Please fill in game name and URL!');
+                return;
+            }
+
+            games.push({
+                name,
+                url,
+                image,
+                description,
+                emoji: '🎮'
+            });
+
+            saveGames();
+            renderGames();
+            displayGamesOfWeek();
+            closeAddGameModal();
+        }
+
+        function deleteGame(idx) {
+            if (confirm('Delete this game?')) {
+                games.splice(idx, 1);
+                saveGames();
+                renderGames();
+                displayGamesOfWeek();
+            }
+        }
+
+        // Export/Import
+        function exportGames() {
+            const customGames = games.slice(defaultGames.length);
+            const data = {
+                games: customGames,
+                favorites: favorites,
+                exportDate: new Date().toISOString()
+            };
+            const json = JSON.stringify(data, null, 2);
+            
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'game-hub-backup.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('active');
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('active');
+            document.getElementById('importData').value = '';
+        }
+
+        function importGames() {
+            try {
+                const data = JSON.parse(document.getElementById('importData').value);
+                games = [...defaultGames, ...data.games];
+                favorites = data.favorites || [];
+                saveGames();
+                renderGames();
+                renderFavorites();
+                displayGamesOfWeek();
+                closeImportModal();
+                alert('Games imported successfully!');
+            } catch (e) {
+                alert('Invalid JSON format!');
+            }
+        }
+
+        // Code modal
+        function openCodeModal() {
+            document.getElementById('codeModal').classList.add('active');
+        }
+
+        function closeCodeModal() {
+            document.getElementById('codeModal').classList.remove('active');
+        }
+
+        // Close modals on outside click
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
+    </script>
 </body>
 </html>
